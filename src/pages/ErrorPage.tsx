@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function ErrorPage() {
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function ErrorPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }
