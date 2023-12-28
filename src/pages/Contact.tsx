@@ -23,36 +23,32 @@ export default function Contact() {
                   Nous envoyer un message :
                 </h2>
 
-                <form>
+                <form action="/api/contact.php" method="POST">
                   <div className="grid gap-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label
-                          htmlFor="hs-firstname-contacts-1"
-                          className="sr-only"
-                        >
+                        <label htmlFor="firstname" className="sr-only">
                           Prénom
                         </label>
                         <input
+                          required
                           type="text"
-                          name="hs-firstname-contacts-1"
-                          id="hs-firstname-contacts-1"
+                          name="firstname"
+                          id="firstname"
                           className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                           placeholder="Prénom"
                         />
                       </div>
 
                       <div>
-                        <label
-                          htmlFor="hs-lastname-contacts-1"
-                          className="sr-only"
-                        >
+                        <label htmlFor="lastname" className="sr-only">
                           Nom
                         </label>
                         <input
+                          required
                           type="text"
-                          name="hs-lastname-contacts-1"
-                          id="hs-lastname-contacts-1"
+                          name="lastname"
+                          id="lastname"
                           className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                           placeholder="Nom"
                         />
@@ -60,13 +56,14 @@ export default function Contact() {
                     </div>
 
                     <div>
-                      <label htmlFor="hs-email-contacts-1" className="sr-only">
+                      <label htmlFor="email" className="sr-only">
                         Email
                       </label>
                       <input
+                        required
                         type="email"
-                        name="hs-email-contacts-1"
-                        id="hs-email-contacts-1"
+                        name="email"
+                        id="email"
                         autoComplete="email"
                         className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Email"
@@ -74,25 +71,26 @@ export default function Contact() {
                     </div>
 
                     <div>
-                      <label htmlFor="hs-phone-number-1" className="sr-only">
+                      <label htmlFor="phone" className="sr-only">
                         Téléphone
                       </label>
                       <input
-                        type="text"
-                        name="hs-phone-number-1"
-                        id="hs-phone-number-1"
+                        required
+                        type="tel"
+                        name="phone"
+                        id="phone"
                         className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Téléphone"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="hs-about-contacts-1" className="sr-only">
+                      <label htmlFor="message" className="sr-only">
                         Message
                       </label>
                       <textarea
-                        id="hs-about-contacts-1"
-                        name="hs-about-contacts-1"
+                        id="message"
+                        name="message"
                         rows={4}
                         className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Message"
