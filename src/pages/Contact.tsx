@@ -1,10 +1,54 @@
-import { useEffect } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import GlobalLayout from "../layouts/GlobalLayout";
+import axios from "axios";
 
 export default function Contact() {
   useEffect(() => {
     document.title = "Percuson - Contact";
   }, []);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://percuson-shop.fr/send", formData);
+      if (response.data === "success") {
+        setSuccessMessage("Votre message a été envoyé avec succès !");
+        // Vous pouvez également réinitialiser le formulaire ici
+        setFormData({
+          firstname: "",
+          lastname: "",
+          phone: "",
+          email: "",
+          message: "",
+        });
+        setErrorMessage("");
+      } else {
+        // Gérer les autres réponses ou erreurs
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du mail", error);
+      setErrorMessage(
+        "Erreur lors de l'envoi du message. Veuillez réessayer ultérieurement."
+      );
+    }
+  };
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <>
@@ -12,9 +56,25 @@ export default function Contact() {
         <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
           <div className="max-w-2xl lg:max-w-5xl mx-auto">
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl">
+              <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl pb-8">
                 Contactez-nous
               </h1>
+              {successMessage && (
+                <div
+                  className="bg-teal-500 text-sm text-white rounded-lg p-4"
+                  role="alert"
+                >
+                  <span className="font-bold">{successMessage}</span>
+                </div>
+              )}
+              {errorMessage && (
+                <div
+                  className="bg-red-400 text-sm text-white rounded-lg p-4"
+                  role="alert"
+                >
+                  <span className="font-bold">{errorMessage}</span>
+                </div>
+              )}
             </div>
 
             <div className="mt-12 grid items-center lg:grid-cols-2 gap-6 lg:gap-16">
@@ -23,7 +83,7 @@ export default function Contact() {
                   Nous envoyer un message :
                 </h2>
 
-                <form action="" method="POST">
+                <form onSubmit={handleSubmit}>
                   <div className="grid gap-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
@@ -37,6 +97,8 @@ export default function Contact() {
                           id="firstname"
                           className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                           placeholder="Prénom"
+                          value={formData.firstname}
+                          onChange={handleChange}
                         />
                       </div>
 
@@ -51,6 +113,8 @@ export default function Contact() {
                           id="lastname"
                           className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                           placeholder="Nom"
+                          value={formData.lastname}
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -67,6 +131,8 @@ export default function Contact() {
                         autoComplete="email"
                         className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Email"
+                        value={formData.email}
+                        onChange={handleChange}
                       />
                     </div>
 
@@ -81,6 +147,8 @@ export default function Contact() {
                         id="phone"
                         className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Téléphone"
+                        value={formData.phone}
+                        onChange={handleChange}
                       />
                     </div>
 
@@ -94,6 +162,8 @@ export default function Contact() {
                         rows={4}
                         className="py-3 px-4 block w-full border rounded-lg text-sm focus:border-slate-500 focus:ring-slate-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Message"
+                        value={formData.message}
+                        onChange={handleChange}
                       ></textarea>
                     </div>
                   </div>
@@ -148,8 +218,8 @@ export default function Contact() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M0.975821 6.92249C0.43689 6.92249 -3.50468e-07 7.34222 -3.27835e-07 7.85999C-3.05203e-07 8.37775 0.43689 8.79749 0.975821 8.79749L12.7694 8.79748L7.60447 13.7596C7.22339 14.1257 7.22339 14.7193 7.60447 15.0854C7.98555 15.4515 8.60341 15.4515 8.98449 15.0854L15.6427 8.68862C16.1191 8.23098 16.1191 7.48899 15.6427 7.03134L8.98449 0.634573C8.60341 0.268455 7.98555 0.268456 7.60447 0.634573C7.22339 1.00069 7.22339 1.59428 7.60447 1.9604L12.7694 6.92248L0.975821 6.92249Z"
                           fill="currentColor"
                         />
@@ -191,8 +261,8 @@ export default function Contact() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M0.975821 6.92249C0.43689 6.92249 -3.50468e-07 7.34222 -3.27835e-07 7.85999C-3.05203e-07 8.37775 0.43689 8.79749 0.975821 8.79749L12.7694 8.79748L7.60447 13.7596C7.22339 14.1257 7.22339 14.7193 7.60447 15.0854C7.98555 15.4515 8.60341 15.4515 8.98449 15.0854L15.6427 8.68862C16.1191 8.23098 16.1191 7.48899 15.6427 7.03134L8.98449 0.634573C8.60341 0.268455 7.98555 0.268456 7.60447 0.634573C7.22339 1.00069 7.22339 1.59428 7.60447 1.9604L12.7694 6.92248L0.975821 6.92249Z"
                           fill="currentColor"
                         />
@@ -210,9 +280,9 @@ export default function Contact() {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z" />
                     <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10" />
@@ -238,8 +308,8 @@ export default function Contact() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M0.975821 6.92249C0.43689 6.92249 -3.50468e-07 7.34222 -3.27835e-07 7.85999C-3.05203e-07 8.37775 0.43689 8.79749 0.975821 8.79749L12.7694 8.79748L7.60447 13.7596C7.22339 14.1257 7.22339 14.7193 7.60447 15.0854C7.98555 15.4515 8.60341 15.4515 8.98449 15.0854L15.6427 8.68862C16.1191 8.23098 16.1191 7.48899 15.6427 7.03134L8.98449 0.634573C8.60341 0.268455 7.98555 0.268456 7.60447 0.634573C7.22339 1.00069 7.22339 1.59428 7.60447 1.9604L12.7694 6.92248L0.975821 6.92249Z"
                           fill="currentColor"
                         />
@@ -279,8 +349,8 @@ export default function Contact() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M0.975821 6.92249C0.43689 6.92249 -3.50468e-07 7.34222 -3.27835e-07 7.85999C-3.05203e-07 8.37775 0.43689 8.79749 0.975821 8.79749L12.7694 8.79748L7.60447 13.7596C7.22339 14.1257 7.22339 14.7193 7.60447 15.0854C7.98555 15.4515 8.60341 15.4515 8.98449 15.0854L15.6427 8.68862C16.1191 8.23098 16.1191 7.48899 15.6427 7.03134L8.98449 0.634573C8.60341 0.268455 7.98555 0.268456 7.60447 0.634573C7.22339 1.00069 7.22339 1.59428 7.60447 1.9604L12.7694 6.92248L0.975821 6.92249Z"
                           fill="currentColor"
                         />
